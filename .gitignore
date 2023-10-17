@@ -56,3 +56,4 @@ build/Debug/CMakeFiles/main.dir/vc140.pdb
 build/Debug/CMakeFiles/ShowIncludes/foo.h
 build/Debug/CMakeFiles/ShowIncludes/main.c
 build/Debug/CMakeFiles/ShowIncludes/main.obj
+.gitignore
