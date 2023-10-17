@@ -16,5 +16,11 @@
 
 * Color 選擇顏色
 * Type 選擇筆刷種類
+    * Point 畫點
+    * Line 畫線
+    * Circle 畫圓
+    * Polygon 畫多邊形
+    * Curve 畫曲線
+    * Type 輸入文字
 * Size 調整筆刷大小
 * File 開啟檔案、儲存檔案、清空畫面
