@@ -57,7 +57,6 @@ find_package(OpenCV 4 REQUIRED)
 
 set(Codes
     "main"
-    "test2"
 )
 
 foreach(ex IN LISTS Codes)
