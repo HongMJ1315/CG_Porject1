@@ -94,11 +94,11 @@ void save_motion(){
     }
   }
   undo_stack.push(image_info(width, height, tmp_image));
-  std::cout << "undo stack size: " << undo_stack.size() << std::endl;
+  // std::cout << "undo stack size: " << undo_stack.size() << std::endl;
 }
 
 void undo_func(){
-  std::cout << "undo_func" << std::endl;
+  // std::cout << "undo_func" << std::endl;
   if(undo_stack.size() == 2){
     for(int i = 0; i < width; i++){
       for(int j = 0; j < height; j++){
@@ -143,13 +143,12 @@ void undo_func(){
     GL_RGBA, GL_UNSIGNED_BYTE,
     image);
   glFlush();
-  std::cout << "undo stack size: " << undo_stack.size() << std::endl;
-  std::cout << "redo stack size: " << redo_stack.size() << std::endl;
-
+  // std::cout << "undo stack size: " << undo_stack.size() << std::endl;
+  // std::cout << "redo stack size: " << redo_stack.size() << std::endl;
 }
 
 void redo_func(){
-  std::cout << "redo_func" << std::endl;
+  // std::cout << "redo_func" << std::endl;
   std::vector<std::vector<unsigned char> > tmp_image = redo_stack.top().image;
   undo_stack.push(image_info(width, height, tmp_image));
   width = redo_stack.top().width;
@@ -171,19 +170,17 @@ void redo_func(){
     GL_RGBA, GL_UNSIGNED_BYTE,
     image);
   glFlush();
-  std::cout << "undo stack size: " << undo_stack.size() << std::endl;
-  std::cout << "redo stack size: " << redo_stack.size() << std::endl;
+  // std::cout << "undo stack size: " << undo_stack.size() << std::endl;
+  // std::cout << "redo stack size: " << redo_stack.size() << std::endl;
 }
 
 void draw_string(){
-  std::cout << type_x << " " << type_y << " " << input_string << std::endl;
+  // std::cout << type_x << " " << type_y << " " << input_string << std::endl;
   glRasterPos2i(type_x, height - type_y);
   for(int i = 0; i < input_string.length(); i++){
     glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, input_string[i]);
   }
 }
-
-
 
 /*------------------------------------------------------------
  * Callback function for display, redisplay, expose events
@@ -194,16 +191,15 @@ void display_func(void){
   // glClear(GL_COLOR_BUFFER_BIT);
   draw_string();
   glFlush();
-  std::cout << "display_func" << std::endl;
+  // std::cout << "display_func" << std::endl;
 }
-
 
 /*-------------------------------------------------------------
  * reshape callback function for window.
  */
 void my_reshape(int new_w, int new_h){
   if(load_image_height != INF and load_image_height != INF and (height < load_image_height || width < load_image_width)){
-    std::cout << "height: " << height << " width: " << width << std::endl;
+    // std::cout << "height: " << height << " width: " << width << std::endl;
     height = load_image_height;
     width = load_image_width;
     glutReshapeWindow(load_image_width, load_image_height);
@@ -211,7 +207,7 @@ void my_reshape(int new_w, int new_h){
   }
   height = new_h;
   width = new_w;
-  std::cout << "width: " << width << " height: " << height << std::endl;
+  // std::cout << "width: " << width << " height: " << height << std::endl;
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
   gluOrtho2D(0.0, (double) width, 0.0, (double) height);
@@ -221,26 +217,6 @@ void my_reshape(int new_w, int new_h){
   glutPostRedisplay();   /*---Trigger Display event for redisplay window*/
   glFlush();
 }
-
-void reshape_func(int new_w, int new_h, int width, int height){
-  v_image.resize(new_w, std::vector<unsigned char>(new_h, 0));
-  // glutReshapeWindow(width, height);
-
-  /*
-    for(int i = 0; i < height * width; i++){
-
-      delete[] image[i];
-    }
-    delete[] image;
-    image = nullptr;
-
-    image = new unsigned char *[new_w * new_h];
-    for(int i = 0; i < new_w * new_h; i++){
-      image[i] = new unsigned char[4];
-    }
-  */
-}
-
 
 
 /*---------------------------------------------------------
@@ -274,7 +250,6 @@ void draw_grid(int col, int row){
   }
   glEnd();
   glFinish();
-
 }
 
 
@@ -297,7 +272,6 @@ void draw_circle(){
     3);
   glPopMatrix();
   save_motion();
-
 }
 
 
@@ -351,7 +325,6 @@ void mouse_func(int button, int state, int x, int y){
       glVertex2f(x, height - y);
       glEnd();
       save_motion();
-
     }
     break;
     case POLYGON:  /* Define vertices of poly */
@@ -390,14 +363,11 @@ void mouse_func(int button, int state, int x, int y){
   glFinish();
 }
 
-
-
 /*-------------------------------------------------------------
  * motion callback function. The mouse is pressed and moved.
  */
 void motion_func(int  x, int y){
   if(obj_type != CURVE) return;
-
   if(first == 0){
     first = 1;
     pos_x = x; pos_y = y;
@@ -410,7 +380,6 @@ void motion_func(int  x, int y){
     glEnd();
     pos_x = x; pos_y = y;
   }
-
   glFinish();
 }
 
@@ -426,7 +395,6 @@ void init_window(void){
   glViewport(0, 0, width, height);
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
-
   glClearColor(0.0, 0.0, 1.0, 1.0);
   glClear(GL_COLOR_BUFFER_BIT);
   glFlush();
@@ -482,7 +450,7 @@ void rotate_image(unsigned char image[MXN][4], cv::Mat img){
 
 void output_image(unsigned char image[MXN][4], const char *filename){
   cv::Mat img(height, width, CV_8UC4);
-  std::cout << "save file" << std::endl;
+  // std::cout << "save file" << std::endl;
 
   for(int i = 0; i < width; i++){
     for(int j = 0; j < height; j++){
@@ -507,18 +475,14 @@ void output_image(unsigned char image[MXN][4], const char *filename){
   }
   cv::imwrite(filename, img);
   std::cout << "save file done" << std::endl;
-  std::cout << "image size:" << height << " " << width << std::endl;
+  // std::cout << "image size:" << height << " " << width << std::endl;
 }
 
 void read_image(unsigned char image[MXN][4], const char *filename){
   cv::Mat img = cv::imread(filename, cv::IMREAD_UNCHANGED);
-  std::cout << "read file" << std::endl;
-
-  // reshape_func(img.cols, img.rows, width, height);
+  // std::cout << "read file" << std::endl;
   width = img.rows;
   height = img.cols;
-
-  std::cout << "reshape_func done" << std::endl;
   std::vector<std::vector<unsigned char> > tmp_image(width * height, std::vector<unsigned char>(4, 0)), tmp_image2(width * height, std::vector<unsigned char>(4, 0));
   for(int i = 0; i < img.cols; i++){
     for(int j = 0; j < img.rows; j++){
@@ -530,7 +494,6 @@ void read_image(unsigned char image[MXN][4], const char *filename){
   }
   rotate_image(image, img);
   std::swap(width, height);
-
   load_image_height = height;
   load_image_width = width;
   // for(int i = 0; i < img.rows; i++){
@@ -556,10 +519,6 @@ void read_image(unsigned char image[MXN][4], const char *filename){
   undo_stack.push(image_info(width, height, tmp_image));
   std::cout << "read file done" << std::endl;
 }
-
-
-
-
 
 /*-----------------------------------------------------------------
  * Callback function for color menu
@@ -591,13 +550,11 @@ void  color_func(int value){
   glColor3f(myColor[0], myColor[1], myColor[2]);
 }
 
-
 /*------------------------------------------------------------
  * Callback function for top menu.
  */
 void file_func(int value){
   int i, j;
-
   if(value == MY_QUIT) exit(0);
   else if(value == MY_CLEAR) init_window();
   else if(value == MY_SAVE){ /* Save current window */
@@ -621,7 +578,6 @@ void file_func(int value){
       GL_RGBA, GL_UNSIGNED_BYTE,
       image);
     // save_motion();
-
   }
   else if(value == MY_BLEND){ /* Blending current image with the saved image */
     glEnable(GL_BLEND);
@@ -632,25 +588,23 @@ void file_func(int value){
       image);
     glDisable(GL_BLEND);
   }
-
   glFlush();
 }
 
 void size_func(int value){
-  std::cout << "call size_func " << value << std::endl;
-  if(value == 1){
+  // std::cout << "call size_func " << value << std::endl;
+  if(value == 1)
     if(pnt_size < 10.0) pnt_size += 1.0;
-  }
-  else{
-    if(pnt_size > 1.0) pnt_size = pnt_size - 1.0;
-  }
+
+    else
+      if(pnt_size > 1.0) pnt_size = pnt_size - 1.0;
+
 }
 
 /*---------------------------------------------------------------
  * Callback function for top menu. Do nothing.
  */
 void top_menu_func(int value){}
-
 
 /*-------------------------------------------------------------
  * Callback Func for type_m, define drawing object
@@ -662,13 +616,11 @@ void draw_type(int value){
   else if(value == POLYGON) side = 0;
 }
 
-
 /*--------------------------------------------------------------
  * Callback function for keyboard event.
  * key = the key pressed,
  * (x,y)= position in the window, where the key is pressed.
  */
-
 void keyboardDown(unsigned char key, int x, int y){
   if(obj_type == TYPE and !ctrl){
     switch(key){
@@ -680,7 +632,7 @@ void keyboardDown(unsigned char key, int x, int y){
       // Backspace
       case 8:
       if(input_string.length() > 0){
-        std::cout << "Back" << std::endl;
+        // std::cout << "Back" << std::endl;
         input_string.pop_back();
       }
       break;
@@ -689,10 +641,9 @@ void keyboardDown(unsigned char key, int x, int y){
       break;
     }
     glutPostRedisplay();
-
     return;
   }
-  std::cout << "ctrl: " << ctrl << "shift: " << shift << "key: " << (int) key << std::endl;
+  // std::cout << "ctrl: " << ctrl << "shift: " << shift << "key: " << (int) key << std::endl;
   if(ctrl){
     switch(key){
       //17
@@ -730,9 +681,7 @@ void keyboardDown(unsigned char key, int x, int y){
       if(redo_stack.empty()) break;
       redo_func();
       break;
-
     }
-
   }
   else if(shift){
     switch(key){
@@ -744,7 +693,6 @@ void keyboardDown(unsigned char key, int x, int y){
       break;
     }
   }
-
 }
 
 void specialKeyboardDown(int key, int x, int y){
@@ -753,7 +701,6 @@ void specialKeyboardDown(int key, int x, int y){
     ctrl = true;
   else if(key == 112)
     shift = true;
-
 }
 
 void specialKeyboardUp(int key, int x, int y){
