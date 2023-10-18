@@ -36,6 +36,7 @@
 #define    CIRCLE  4
 #define    CURVE   5
 #define    TYPE   6
+#define    GRID   7
 
 #define INF 0x3f3f3f3f
 #define MXN 5000000
@@ -60,7 +61,7 @@ std::string input_string = "";
 bool       ctrl = false, shift = false;
 int        type_x = 0, type_y = 0;
 int        load_image_width = INF, load_image_height = INF;
-bool keystates[256] = { false };
+bool       keystates[256] = { false };
 
 
 struct image_info{
@@ -175,7 +176,7 @@ void redo_func(){
 }
 
 void draw_string(){
-  std::cout << type_x << " " << type_y << std::endl;
+  std::cout << type_x << " " << type_y << " " << input_string << std::endl;
   glRasterPos2i(type_x, height - type_y);
   for(int i = 0; i < input_string.length(); i++){
     glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, input_string[i]);
@@ -190,7 +191,7 @@ void draw_string(){
  */
 void display_func(void){
   /* define window background color */
-  //glClear(GL_COLOR_BUFFER_BIT);
+  // glClear(GL_COLOR_BUFFER_BIT);
   draw_string();
   glFlush();
   std::cout << "display_func" << std::endl;
@@ -249,6 +250,8 @@ void draw_polygon(){
   int  i;
 
   glBegin(GL_POLYGON);
+  glPointSize(pnt_size);
+
   for(i = 0; i < side; i++)
     glVertex2f(vertex[i][0], height - vertex[i][1]);
   glEnd();
@@ -257,6 +260,22 @@ void draw_polygon(){
   save_motion();
 }
 
+void draw_grid(int col, int row){
+  glBegin(GL_LINES);
+  glPointSize(pnt_size);
+
+  for(int i = 0; i <= col; i++){
+    glVertex2f(pos_x + i * 10 * pnt_size, height - pos_y);
+    glVertex2f(pos_x + i * 10 * pnt_size, height - (pos_y + row * 10 * pnt_size));
+  }
+  for(int i = 0; i <= row; i++){
+    glVertex2f(pos_x, height - (pos_y + i * 10 * pnt_size));
+    glVertex2f(pos_x + col * 10 * pnt_size, height - (pos_y + i * 10 * pnt_size));
+  }
+  glEnd();
+  glFinish();
+
+}
 
 
 /*------------------------------------------------------------
@@ -359,6 +378,12 @@ void mouse_func(int button, int state, int x, int y){
     pos_x = x; pos_y = y;
     draw_circle();
     break;
+    case GRID:
+    pos_x = x; pos_y = y;
+    int col, row;
+    std::cin >> col >> row;
+    draw_grid(col, row);
+    break;
     default:
     break;
   }
@@ -379,6 +404,7 @@ void motion_func(int  x, int y){
   }
   else{
     glBegin(GL_LINES);
+    glPointSize(pnt_size);
     glVertex3f(pos_x, height - pos_y, 0.0);
     glVertex3f(x, height - y, 0.0);
     glEnd();
@@ -653,8 +679,10 @@ void keyboardDown(unsigned char key, int x, int y){
       break;
       // Backspace
       case 8:
-      if(input_string.length() > 0)
+      if(input_string.length() > 0){
+        std::cout << "Back" << std::endl;
         input_string.pop_back();
+      }
       break;
       default:
       input_string += key;
@@ -789,6 +817,7 @@ int main(int argc, char **argv){
   glutAddMenuEntry("Curve", CURVE);
   glutAddMenuEntry("Circle", CIRCLE);
   glutAddMenuEntry("Type", TYPE);
+  glutAddMenuEntry("Grid", GRID);
 
   size_menu = glutCreateMenu(size_func);
   glutAddMenuEntry("Bigger", 1);
