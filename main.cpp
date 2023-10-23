@@ -622,12 +622,15 @@ void draw_type(int value){
  * (x,y)= position in the window, where the key is pressed.
  */
 void keyboardDown(unsigned char key, int x, int y){
+  std::cout << (int) key << std::endl;
   if(obj_type == TYPE and !ctrl){
     switch(key){
       //Enter
       case 13:
+
       input_string = "";
       save_motion();
+
       break;
       // Backspace
       case 8:
@@ -681,6 +684,13 @@ void keyboardDown(unsigned char key, int x, int y){
       if(redo_stack.empty()) break;
       redo_func();
       break;
+
+      case 10:
+      type_y += 15;
+      input_string.clear();
+      std::cout << "enter" << std::endl;
+      glutPostRedisplay();
+      break;
     }
   }
   else if(shift){
@@ -697,6 +707,7 @@ void keyboardDown(unsigned char key, int x, int y){
 
 void specialKeyboardDown(int key, int x, int y){
   //ctrl
+  std::cout << key << std::endl;
   if(key == 114)
     ctrl = true;
   else if(key == 112)
